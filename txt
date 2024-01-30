@@ -1,0 +1,124 @@
+   <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <div class="container">
+         <a href="" class="navbar-brand">DevLarry</a>
+           <button class="navbar-toggler"
+           type="button"
+           data-bs-toggle="collapse"
+           data-bs-target="#navmenu"
+           >
+            <span class="navbar-toggler-icon"></span>
+           </button>
+
+         <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-items">
+              <a href="#" class="nav-link">Home</a>
+            </li>
+            <li class="nav-items">
+              <a href="#" class="nav-link">News</a>
+            </li>
+            <li class="nav-items">
+              <a href="#" class="nav-link">About</a>
+            </li>
+            <li class="nav-items">
+              <a href="#" class="nav-link">Contact</a>
+            </li>
+          </ul>
+         </div>
+      </div>
+       
+    </nav>
+<section class="bg-dark text-light pt-5 text-center">
+
+</section>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>News Fetcher</title>
+  <style>
+    .article {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+    .article img {
+      width: 100px;
+      height: auto;
+      margin-right: 10px;
+    }
+    .article-content {
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Top Headlines in the US</h1>
+  <div id="newsList"></div>
+
+  <script>
+    // Function to fetch news from NewsAPI
+    function fetchNews() {
+      const apiKey = 'ed4ff1093860439ab02bf6bb1a49901b'; // Replace 'YOUR_NEWSAPI_KEY' with your actual NewsAPI key
+      const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`;
+
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayNews(data.articles);
+        })
+        .catch(error => {
+          console.error('There has been a problem with your fetch operation:', error);
+        });
+    }
+
+    // Function to display news on the webpage
+    function displayNews(articles) {
+      const newsList = document.getElementById('newsList');
+
+      articles.forEach(article => {
+        const articleDiv = document.createElement('div');
+        articleDiv.classList.add('article');
+
+        const image = document.createElement('img');
+        image.src = article.urlToImage ? article.urlToImage : 'https://via.placeholder.com/100';
+        image.alt = 'News Image';
+
+        const articleContent = document.createElement('div');
+        articleContent.classList.add('article-content');
+
+        const link = document.createElement('a');
+        link.href = article.url;
+        link.textContent = article.title;
+        link.style.fontWeight = 'bold';
+        link.style.textDecoration = 'none';
+        link.style.color = '#333';
+
+        const description = document.createElement('p');
+        description.textContent = article.description ? article.description : 'No description available.';
+
+        articleContent.appendChild(link);
+        articleContent.appendChild(description);
+
+        articleDiv.appendChild(image);
+        articleDiv.appendChild(articleContent);
+
+        newsList.appendChild(articleDiv);
+      });
+    }
+
+    // Fetch news when the page loads
+    window.onload = fetchNews;
+  </script>
+</body>
+</html>
